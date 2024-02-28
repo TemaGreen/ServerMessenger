@@ -1,0 +1,1 @@
+SELECT d.id, d.name, d.author, u.name, d.time_create FROM public.user_dialogs AS ud JOIN public.dialogs AS d ON d.id = ud.id_dialogs LEFT JOIN public.user AS u ON u.id = d.author WHERE ud.id_participant = 1

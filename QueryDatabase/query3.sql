@@ -1,0 +1,1 @@
+SELECT d.id, d.name, u.id, u.name FROM public.dialogs AS d INNER JOIN public.user AS u ON d.author = u.id WHERE d.author = 1 
