@@ -2,6 +2,7 @@ package com.example.messenger.server.controller;
 
 import com.example.messenger.server.data.dao.DialogsDao;
 import com.example.messenger.server.data.dao.MessagesDao;
+import com.example.messenger.server.data.dao.ParticipantDao;
 import com.example.messenger.server.data.dao.UserDao;
 import com.example.messenger.server.data.model.Dialog;
 import com.example.messenger.server.data.model.Message;
@@ -11,11 +12,8 @@ import com.example.messenger.server.data.response.ResponseDialogMessage;
 import com.example.messenger.server.data.response.ResponseUserDialog;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 public class MainController {
@@ -25,6 +23,8 @@ public class MainController {
     private MessagesDao messagesDao;
 
     private DialogsDao dialogsDao;
+
+    private ParticipantDao participantDao;
 
     // Все сообщения
     @GetMapping("/message/all")
@@ -113,18 +113,20 @@ public class MainController {
     //Получение списка участников диалога по id-шнику диалога
     @GetMapping("/participant/{id}")
     public LinkedList<User> getParticipant(@PathVariable int id) {
-        return userDao.selectParticipantByDialog(id);
+        return participantDao.selectParticipantByDialog(id);
     }
 
-    //Получение списка участников диалога по имени создателя диалога
-    @PostMapping("/participant")
-    public LinkedList<User> getParticipantByAuthor(@RequestBody RequestParticipantByAuthor requestParticipantByAuthor) {
-        return userDao.selectParticipantByAuthor(requestParticipantByAuthor.getAuthor());
-    }
-
-    @GetMapping("/participant/can-added")
+    //Получение списка пользователей которых можно добавить в диалог
+    @PostMapping("/participant/can-added")
     public LinkedList<User> getUserCanAdded(@RequestBody RequestUserCanAdded requestUserCanAdded){
-        return userDao.getUsersCanAdded(requestUserCanAdded.getDialog());
+        return participantDao.getUsersCanAdded(requestUserCanAdded.getDialog());
+    }
+
+    //Добавить новых участников в диалог
+    @PostMapping("/participant/add")
+    public List<User> addNewParticipantDialog(@RequestBody RequestAddNewParticipantDialog request){
+        participantDao.addNewParticipantDialog(request);
+        return participantDao.selectParticipantByDialog(request.getDialog());
     }
 
     //Получение списка диалогов
@@ -136,7 +138,7 @@ public class MainController {
     //Получение диалога по id-шнику
     @GetMapping("/dialog/{id}")
     public ResponseUserDialog getDialogById(@PathVariable int id) {
-        return dialogsDao.selectDialogsById(id);
+        return dialogsDao.selectById(id);
     }
 
     //Удаление диалога по id-шнику
@@ -163,19 +165,12 @@ public class MainController {
         dialogsDao.createDialog(requestCreateDialogUser);
         return dialogsDao.selectUserDialogsByUserId(requestCreateDialogUser.getAuthor());
     }
-/*
-    @GetMapping("/select")
-    public LinkedList<ResponseUserDialog> createDialogUser(){
-        List<Integer> users = Stream.of(5,7,10).toList();
-        RequestCreateDialogUser requestCreateDialogUser = new RequestCreateDialogUser(1,"Какой-то диалог", users);
-        dialogsDao.createDialog(requestCreateDialogUser);
-        return dialogsDao.selectUserDialogsByUserId(1);
-    }
-*/
+
     public MainController() {
         this.userDao = new UserDao();
         this.messagesDao = new MessagesDao();
         this.dialogsDao = new DialogsDao();
+        this.participantDao = new ParticipantDao();
     }
 }
 /*

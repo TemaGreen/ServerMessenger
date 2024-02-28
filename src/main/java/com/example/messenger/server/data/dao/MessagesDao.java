@@ -11,6 +11,12 @@ import java.util.List;
 
 public class MessagesDao {
 
+    /**
+     * Добавить сообщение
+     * @param dialog id диалога
+     * @param author id автора сообщения
+     * @param text  текст сообщения
+     */
     public void insertMessage(int dialog, int author, String text) {
         try {
             Connection connection = ConnectManager.getConnect();
@@ -27,6 +33,10 @@ public class MessagesDao {
         }
     }
 
+    /**
+     * Удалить сообщение
+     * @param id id сообщения
+     */
     public void deleteMessage(int id) {
         try {
             Connection connection = ConnectManager.getConnect();
@@ -41,6 +51,13 @@ public class MessagesDao {
         }
     }
 
+    /**
+     * Изменить сообщение
+     * @param message id сообщения
+     * @param dialog новое значение id диалога
+     * @param author новое id автора сообщения
+     * @param text новый текст сообщения
+     */
     public void updateMessage(int message, int dialog, int author, String text) {
         try {
             Connection connection = ConnectManager.getConnect();
@@ -59,6 +76,10 @@ public class MessagesDao {
         }
     }
 
+    /**
+     * Удалить список сообщений
+     * @param list список удаляемых сообщений
+     */
     public void deleteSelectedMessages(List<Integer> list) {
         if (!list.isEmpty()) {
             try {
@@ -77,6 +98,14 @@ public class MessagesDao {
         }
     }
 
+    /**
+     * Изменить сообщение
+     * @param newMessage новое сообщение
+     * @param dialog новое значение id диалога
+     * @param author новое значение id автора
+     * @param text измененный текст сообщения
+     * @param oldMessage старое сообщение
+     */
     public void updateMessage(int newMessage, int dialog, int author, String text, int oldMessage) {
         try {
             Connection connection = ConnectManager.getConnect();
@@ -95,6 +124,10 @@ public class MessagesDao {
         }
     }
 
+    /**
+     * Получить все сообщения
+     * @return список сообщений
+     */
     public LinkedList<Message> selectAllMessages() {
         ResultSet resultSet = null;
         LinkedList<Message> list = new LinkedList<>();
@@ -125,6 +158,11 @@ public class MessagesDao {
         }
     }
 
+    /**
+     * Изменить id сообщения
+     * @param newMessage новый id сообщения
+     * @param oldMessage старый id сообщения
+     */
     public void updateMessageId(int newMessage, int oldMessage) {
         try {
             Connection connection = ConnectManager.getConnect();
@@ -140,6 +178,11 @@ public class MessagesDao {
         }
     }
 
+    /**
+     * Получить сообщение
+     * @param id id нужного сообщения
+     * @return
+     */
     public Message selectMessageById(int id) {
         ResultSet resultSet = null;
         Message message = null;

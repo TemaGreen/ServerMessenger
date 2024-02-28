@@ -6,6 +6,8 @@ public class Dialog {
 
     int author;
 
+    String name;
+
     public int getId() {
         return id;
     }
@@ -22,9 +24,24 @@ public class Dialog {
         this.author = author;
     }
 
-    public Dialog(int id, int author) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Dialog(int id, int author, String name) {
         this.id = id;
         this.author = author;
+        this.name = name;
+    }
+
+    public Dialog(int author, String name) {
+        this.id = -1;
+        this.author = author;
+        this.name = name;
     }
 
     public Dialog(int author) {
